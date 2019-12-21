@@ -24,8 +24,10 @@ opt = parser.parse_args()
 print(opt)
 
 d = ShapeNetDataset(
-    root=opt.dataset,
+    #root=opt.dataset,
+    root='/home/dengjie/dengjie/Paper/PointNet/pointnet.pytorch/shapenetcore_partanno_segmentation_benchmark_v0',
     class_choice=[opt.class_choice],
+    #class_choice=['Airplane','Chair'],  #dengjie
     split='test',
     data_augmentation=False)
 

@@ -21,7 +21,8 @@ opt = parser.parse_args()
 print(opt)
 
 test_dataset = ShapeNetDataset(
-    root='shapenetcore_partanno_segmentation_benchmark_v0',
+    #root='shapenetcore_partanno_segmentation_benchmark_v0',
+    root='/home/dengjie/dengjie/Paper/PointNet/pointnet.pytorch/shapenetcore_partanno_segmentation_benchmark_v0',
     split='test',
     classification=True,
     npoints=opt.num_points,
@@ -45,5 +46,6 @@ for i, data in enumerate(testdataloader, 0):
     loss = F.nll_loss(pred, target)
 
     pred_choice = pred.data.max(1)[1]
-    correct = pred_choice.eq(target.data).cpu().sum()
+    #correct = pred_choice.eq(target.data).cpu().sum()
+    correct = target.eq(pred_choice.data).cpu().sum().data.numpy()
     print('i:%d  loss: %f accuracy: %f' % (i, loss.data.item(), correct / float(32)))

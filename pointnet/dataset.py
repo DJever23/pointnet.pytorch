@@ -64,23 +64,32 @@ class ShapeNetDataset(data.Dataset):
         self.npoints = npoints
         self.root = root
         self.catfile = os.path.join(self.root, 'synsetoffset2category.txt')
+        #self.catfile = '/home/dengjie/dengjie/Paper/PointNet/pointnet.pytorch/shapenetcore_partanno_segmentation_benchmark_v0/synsetoffset2category.txt' 
         self.cat = {}
         self.data_augmentation = data_augmentation
         self.classification = classification
         self.seg_classes = {}
+        #print('3',root)
+        #print('4',self.root)
+        #print('5',self.catfile)
         
         with open(self.catfile, 'r') as f:
             for line in f:
                 ls = line.strip().split()
                 self.cat[ls[0]] = ls[1]
-        #print(self.cat)
+        #print('self.cat',self.cat)
+        #print('333333333',class_choice)
         if not class_choice is None:
+            #print('4444444',class_choice)
+            #print('0000self.cat',self.cat)
             self.cat = {k: v for k, v in self.cat.items() if k in class_choice}
+            #print('1111self.cat',self.cat)
 
         self.id2cat = {v: k for k, v in self.cat.items()}
-
+        #print('2222self.cat',self.cat)
         self.meta = {}
         splitfile = os.path.join(self.root, 'train_test_split', 'shuffled_{}_file_list.json'.format(split))
+        #print('6',splitfile)
         #from IPython import embed; embed()
         filelist = json.load(open(splitfile, 'r'))
         for item in self.cat:
@@ -98,11 +107,14 @@ class ShapeNetDataset(data.Dataset):
                 self.datapath.append((item, fn[0], fn[1]))
 
         self.classes = dict(zip(sorted(self.cat), range(len(self.cat))))
-        print(self.classes)
+        #print(self.classes)
         with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../misc/num_seg_classes.txt'), 'r') as f:
             for line in f:
                 ls = line.strip().split()
                 self.seg_classes[ls[0]] = int(ls[1])
+            #print(self.seg_classes)  #dengjie
+            #print('7')
+        #print('8',self.cat)
         self.num_seg_classes = self.seg_classes[list(self.cat.keys())[0]]
         print(self.seg_classes, self.num_seg_classes)
 
@@ -194,7 +206,11 @@ class ModelNetDataset(data.Dataset):
 if __name__ == '__main__':
     dataset = sys.argv[1]
     datapath = sys.argv[2]
-
+    #dataset = 'shapenet'
+    #datapath = '/home/dengjie/dengjie/Paper/PointNet/pointnet.pytorch/shapenetcore_partanno_segmentation_benchmark_v0'
+    print('dengjie',__name__)
+    print('1',dataset)
+    print('2',datapath)
     if dataset == 'shapenet':
         d = ShapeNetDataset(root = datapath, class_choice = ['Chair'])
         print(len(d))
